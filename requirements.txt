@@ -1,0 +1,16 @@
+# Framework e utilitários
+flask
+python-dotenv
+
+# LangChain e dependências
+langchain
+langchain-openai
+langchain-community
+faiss-cpu
+pypdf
+
+# Visualização e análise
+matplotlib
+scikit-learn
+numpy
+scipy
