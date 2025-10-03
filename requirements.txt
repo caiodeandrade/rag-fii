@@ -1,6 +1,7 @@
 # Framework e utilitários
 flask
 python-dotenv
+flask-cors
 
 # LangChain e dependências
 langchain
