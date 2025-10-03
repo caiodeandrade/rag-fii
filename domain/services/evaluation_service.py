@@ -5,7 +5,6 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 from datasets import Dataset
 
-# Imports do RAGAS (compatibilidade)
 from ragas import evaluate
 
 try:
@@ -30,16 +29,22 @@ except ImportError:
 from domain.services.logging_service import RAGLogger
 
 class RAGEvaluationService:
-    """Serviço para avaliação RAGAS sem ground truth - retorna JSON"""
+    """
+    ATUALIZADO: RAGAS usa GPT-4o-mini por padrão para avaliações
+    Configuração via environment variable
+    """
     
     def __init__(self, openai_api_key: str):
         self.openai_api_key = openai_api_key
         self.logger = RAGLogger()
         
-        # Configurar OpenAI
+        # Configurar OpenAI - RAGAS usará GPT-4o-mini automaticamente
         os.environ["OPENAI_API_KEY"] = openai_api_key
         
-        # Métricas sem ground truth
+        # RAGAS 0.3+ usa modelos mais novos por padrão
+        # Você pode configurar o modelo específico se quiser:
+        # os.environ["RAGAS_LLM_MODEL"] = "gpt-4o-mini"
+        
         self.metrics = {
             'faithfulness': faithfulness,
             'answer_relevancy': answer_relevancy,
@@ -49,19 +54,11 @@ class RAGEvaluationService:
     def evaluate_single_question(self, question: str, rag_service, llm_service) -> Dict[str, Any]:
         """
         Avalia uma única pergunta e retorna resultado JSON
-        
-        Args:
-            question: Pergunta para avaliar
-            rag_service: Serviço RAG
-            llm_service: Serviço LLM
-            
-        Returns:
-            Resultado da avaliação em formato JSON
         """
         start_time = time.time()
         
         try:
-            self.logger.logger.info(f"[RAGAS] Avaliando pergunta: {question[:50]}...")
+            self.logger.logger.info(f"[RAGAS] Avaliando pergunta com GPT-4o-mini: {question[:50]}...")
             
             # 1. Coletar resposta RAG com contexts
             rag_data = self._get_rag_data(rag_service, question)
@@ -69,7 +66,7 @@ class RAGEvaluationService:
             # 2. Coletar resposta LLM
             llm_answer = llm_service.answer_question(question)
             
-            # 3. Avaliar RAG com RAGAS
+            # 3. Avaliar RAG com RAGAS (usa GPT-4o-mini internamente)
             rag_scores = self._evaluate_rag_response(question, rag_data)
             
             # 4. Avaliar LLM (apenas answer_relevancy)
@@ -82,7 +79,8 @@ class RAGEvaluationService:
                 "evaluation_summary": {
                     "timestamp": datetime.now().isoformat(),
                     "processing_time": round(processing_time, 3),
-                    "question_length": len(question)
+                    "question_length": len(question),
+                    "evaluation_model": "gpt-4o-mini"  # RAGAS usa este modelo
                 },
                 "rag_evaluation": {
                     "scores": rag_scores,
@@ -111,10 +109,8 @@ class RAGEvaluationService:
     def _get_rag_data(self, rag_service, question: str) -> Dict[str, Any]:
         """Coleta dados RAG (resposta + contexts)"""
         try:
-            # Usar método simples para não ter citações
             answer = rag_service.answer_question_simple(question)
             
-            # Extrair contexts usando retriever
             contexts = []
             if hasattr(rag_service, 'retriever'):
                 docs = rag_service.retriever.get_relevant_documents(question)
@@ -133,22 +129,20 @@ class RAGEvaluationService:
             return {'answer': f"Error: {str(e)}", 'contexts': []}
     
     def _evaluate_rag_response(self, question: str, rag_data: Dict) -> Dict[str, float]:
-        """Avalia resposta RAG usando RAGAS"""
+        """Avalia resposta RAG usando RAGAS (com GPT-4o-mini)"""
         try:
-            # Preparar dataset
             dataset_dict = {
                 'question': [question],
                 'answer': [rag_data['answer']],
                 'contexts': [rag_data['contexts']],
-                'ground_truth': ['']  # Vazio - sem ground truth
+                'ground_truth': ['']
             }
             
             dataset = Dataset.from_dict(dataset_dict)
             
-            # Executar avaliação
+            # RAGAS usa GPT-4o-mini automaticamente para avaliação
             result = evaluate(dataset, metrics=list(self.metrics.values()))
             
-            # Extrair scores
             scores = {}
             if hasattr(result, 'to_pandas'):
                 df = result.to_pandas()
@@ -165,20 +159,16 @@ class RAGEvaluationService:
     def _evaluate_llm_response(self, question: str, llm_answer: str) -> Dict[str, float]:
         """Avalia resposta LLM (apenas answer_relevancy)"""
         try:
-            # Preparar dataset
             dataset_dict = {
                 'question': [question],
                 'answer': [llm_answer],
-                'contexts': [[]],  # Vazio para LLM
-                'ground_truth': ['']  # Vazio - sem ground truth
+                'contexts': [[]],
+                'ground_truth': ['']
             }
             
             dataset = Dataset.from_dict(dataset_dict)
-            
-            # Avaliar apenas answer_relevancy
             result = evaluate(dataset, metrics=[self.metrics['answer_relevancy']])
             
-            # Extrair score
             score = 0.0
             if hasattr(result, 'to_pandas'):
                 df = result.to_pandas()
@@ -198,107 +188,94 @@ class RAGEvaluationService:
         for metric, score in scores.items():
             if metric == 'faithfulness':
                 if score >= 0.8:
-                    interpretation[metric] = "Excelente fidelidade - resposta baseada nos documentos"
+                    interpretation[metric] = "Excelente - Resposta muito fiel aos documentos"
                 elif score >= 0.6:
-                    interpretation[metric] = "Boa fidelidade - resposta majoritariamente baseada nos documentos"
+                    interpretation[metric] = "Boa - Resposta majoritariamente baseada nos documentos"
                 elif score >= 0.4:
-                    interpretation[metric] = "Fidelidade moderada - resposta parcialmente baseada nos documentos"
+                    interpretation[metric] = "Regular - Alguma base nos documentos, mas com adições"
                 else:
-                    interpretation[metric] = "Baixa fidelidade - resposta pode conter informações não encontradas nos documentos"
-            
+                    interpretation[metric] = "Ruim - Resposta pouco baseada nos documentos"
+                    
             elif metric == 'answer_relevancy':
                 if score >= 0.8:
-                    interpretation[metric] = "Excelente relevância - resposta diretamente relacionada à pergunta"
+                    interpretation[metric] = "Excelente - Resposta muito relevante à pergunta"
                 elif score >= 0.6:
-                    interpretation[metric] = "Boa relevância - resposta relacionada à pergunta"
+                    interpretation[metric] = "Boa - Resposta relevante à pergunta"
                 elif score >= 0.4:
-                    interpretation[metric] = "Relevância moderada - resposta parcialmente relacionada"
+                    interpretation[metric] = "Regular - Resposta parcialmente relevante"
                 else:
-                    interpretation[metric] = "Baixa relevância - resposta pode não estar relacionada à pergunta"
-            
+                    interpretation[metric] = "Ruim - Resposta pouco relevante à pergunta"
+                    
             elif metric == 'context_precision':
                 if score >= 0.8:
-                    interpretation[metric] = "Excelente precisão - contexts muito relevantes"
+                    interpretation[metric] = "Excelente - Documentos recuperados muito relevantes"
                 elif score >= 0.6:
-                    interpretation[metric] = "Boa precisão - contexts relevantes"
+                    interpretation[metric] = "Boa - Documentos recuperados relevantes"
                 elif score >= 0.4:
-                    interpretation[metric] = "Precisão moderada - alguns contexts relevantes"
+                    interpretation[metric] = "Regular - Alguns documentos relevantes"
                 else:
-                    interpretation[metric] = "Baixa precisão - poucos contexts relevantes"
+                    interpretation[metric] = "Ruim - Documentos recuperados pouco relevantes"
         
         return interpretation
     
     def _interpret_llm_scores(self, scores: Dict[str, float]) -> Dict[str, str]:
-        """Interpreta scores LLM em linguagem natural"""
+        """Interpreta scores LLM"""
         interpretation = {}
         
-        for metric, score in scores.items():
-            if metric == 'answer_relevancy':
-                if score >= 0.8:
-                    interpretation[metric] = "Excelente relevância - resposta diretamente relacionada à pergunta"
-                elif score >= 0.6:
-                    interpretation[metric] = "Boa relevância - resposta relacionada à pergunta"
-                elif score >= 0.4:
-                    interpretation[metric] = "Relevância moderada - resposta parcialmente relacionada"
-                else:
-                    interpretation[metric] = "Baixa relevância - resposta pode não estar relacionada à pergunta"
+        score = scores.get('answer_relevancy', 0.0)
+        if score >= 0.8:
+            interpretation['answer_relevancy'] = "Excelente - LLM respondeu de forma muito relevante"
+        elif score >= 0.6:
+            interpretation['answer_relevancy'] = "Boa - LLM respondeu de forma relevante"
+        elif score >= 0.4:
+            interpretation['answer_relevancy'] = "Regular - LLM respondeu parcialmente relevante"
+        else:
+            interpretation['answer_relevancy'] = "Ruim - LLM respondeu de forma pouco relevante"
         
         return interpretation
     
-    def _compare_rag_vs_llm(self, rag_scores: Dict[str, float], llm_scores: Dict[str, float]) -> Dict[str, str]:
+    def _compare_rag_vs_llm(self, rag_scores: Dict, llm_scores: Dict) -> Dict[str, str]:
         """Compara RAG vs LLM"""
         comparison = {}
         
-        # Comparar answer_relevancy
-        if 'answer_relevancy' in rag_scores and 'answer_relevancy' in llm_scores:
-            rag_rel = rag_scores['answer_relevancy']
-            llm_rel = llm_scores['answer_relevancy']
-            
-            if rag_rel > llm_rel:
-                comparison['answer_relevancy'] = f"RAG supera LLM ({rag_rel:.3f} vs {llm_rel:.3f})"
-            elif llm_rel > rag_rel:
-                comparison['answer_relevancy'] = f"LLM supera RAG ({llm_rel:.3f} vs {rag_rel:.3f})"
-            else:
-                comparison['answer_relevancy'] = f"RAG e LLM equivalentes ({rag_rel:.3f})"
+        rag_relevancy = rag_scores.get('answer_relevancy', 0.0)
+        llm_relevancy = llm_scores.get('answer_relevancy', 0.0)
         
-        # Análise geral
-        if 'faithfulness' in rag_scores:
-            faith_score = rag_scores['faithfulness']
-            if faith_score >= 0.7:
-                comparison['overall'] = "RAG oferece maior confiabilidade devido à fidelidade aos documentos"
-            else:
-                comparison['overall'] = "RAG pode ter problemas de fidelidade - verificar qualidade dos documentos"
+        if rag_relevancy > llm_relevancy:
+            diff = ((rag_relevancy - llm_relevancy) / llm_relevancy * 100) if llm_relevancy > 0 else 100
+            comparison['answer_relevancy'] = f"RAG vence por {diff:.1f}% (RAG: {rag_relevancy:.3f} vs LLM: {llm_relevancy:.3f})"
+        elif llm_relevancy > rag_relevancy:
+            diff = ((llm_relevancy - rag_relevancy) / rag_relevancy * 100) if rag_relevancy > 0 else 100
+            comparison['answer_relevancy'] = f"LLM vence por {diff:.1f}% (LLM: {llm_relevancy:.3f} vs RAG: {rag_relevancy:.3f})"
+        else:
+            comparison['answer_relevancy'] = f"Empate (ambos: {rag_relevancy:.3f})"
+        
+        faithfulness = rag_scores.get('faithfulness', 0.0)
+        context_precision = rag_scores.get('context_precision', 0.0)
+        
+        comparison['rag_exclusive'] = {
+            'faithfulness': f"RAG: {faithfulness:.3f} (LLM não aplicável - sem documentos)",
+            'context_precision': f"RAG: {context_precision:.3f} (LLM não aplicável - sem recuperação)"
+        }
         
         return comparison
     
-    def _generate_recommendation(self, rag_scores: Dict[str, float], llm_scores: Dict[str, float]) -> str:
+    def _generate_recommendation(self, rag_scores: Dict, llm_scores: Dict) -> str:
         """Gera recomendação baseada nos scores"""
-        recommendations = []
+        rag_relevancy = rag_scores.get('answer_relevancy', 0.0)
+        llm_relevancy = llm_scores.get('answer_relevancy', 0.0)
+        faithfulness = rag_scores.get('faithfulness', 0.0)
+        context_precision = rag_scores.get('context_precision', 0.0)
         
-        # Análise de fidelidade RAG
-        if 'faithfulness' in rag_scores:
-            faith_score = rag_scores['faithfulness']
-            if faith_score < 0.6:
-                recommendations.append("⚠️ Melhorar qualidade dos documentos ou ajustar chunking")
+        rag_avg = (rag_relevancy + faithfulness + context_precision) / 3
         
-        # Análise de relevância
-        if 'answer_relevancy' in rag_scores and 'answer_relevancy' in llm_scores:
-            rag_rel = rag_scores['answer_relevancy']
-            llm_rel = llm_scores['answer_relevancy']
-            
-            if rag_rel < 0.6:
-                recommendations.append("📝 Melhorar prompt ou ajustar retriever")
-            
-            if llm_rel > rag_rel + 0.2:
-                recommendations.append("🔍 Considerar melhorar estratégia de retrieval")
-        
-        # Análise de precisão de contexto
-        if 'context_precision' in rag_scores:
-            prec_score = rag_scores['context_precision']
-            if prec_score < 0.6:
-                recommendations.append("🎯 Ajustar estratégia de chunking ou embedding")
-        
-        if not recommendations:
-            recommendations.append("✅ Sistema funcionando bem - manter configuração atual")
-        
-        return " | ".join(recommendations)
+        if rag_avg >= 0.7 and rag_relevancy >= llm_relevancy:
+            return "RECOMENDADO: Use RAG - Alta qualidade e baseado em documentos confiáveis"
+        elif rag_relevancy >= 0.6 and faithfulness >= 0.6:
+            return "RECOMENDADO: Use RAG - Boa qualidade e fiel aos documentos"
+        elif llm_relevancy > rag_relevancy and llm_relevancy >= 0.7:
+            return "CUIDADO: LLM mais relevante, mas pode alucinar. Considere melhorar recuperação RAG"
+        elif faithfulness < 0.4:
+            return "ATENÇÃO: RAG com baixa fidelidade. Verifique qualidade dos documentos"
+        else:
+            return "ANÁLISE: Ambos com performance similar. Prefira RAG para maior confiabilidade"

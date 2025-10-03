@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from dotenv import load_dotenv
-from langchain_community.llms import OpenAI
+from langchain_openai import ChatOpenAI  # MUDANÇA: ChatOpenAI em vez de OpenAI
 
 from data.repositories.local.faiss_repository import FaissRepository
 from domain.services.rag_service import RAGService
@@ -24,8 +24,18 @@ app = Flask(__name__)
 faiss_repo = FaissRepository(FAISS_PATH, PDFS_DIR, openai_api_key)
 vectorstore = faiss_repo.load_or_create_index()
 
-# Domain Services
-llm = OpenAI(openai_api_key=openai_api_key)
+# Domain - MUDANÇA: Usar ChatOpenAI e especificar modelo
+# Opções:
+# - "gpt-4o-mini" (recomendado - mais barato, rápido e eficiente)
+# - "gpt-4o" (mais poderoso, mais caro)
+# - "gpt-4-turbo" (versão anterior, ainda bom)
+
+llm = ChatOpenAI(
+    api_key=openai_api_key,
+    model="gpt-4o-mini",  # Ou "gpt-4o" se preferir o mais poderoso
+    temperature=0  # 0 para respostas mais consistentes/determinísticas
+)
+
 rag_service = RAGService(llm, vectorstore.as_retriever())
 llm_service = LLMService(llm)
 evaluation_service = RAGEvaluationService(openai_api_key=openai_api_key)

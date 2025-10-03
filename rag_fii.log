@@ -44,3 +44,97 @@
 2025-09-25 19:41:47 - rag_fii - INFO - [QUERY] rag_simple: 104 chars → 30 chars (2.510s)
 2025-09-25 19:41:51 - rag_fii - INFO - [QUERY] llm_only: 104 chars → 151 chars (1.433s)
 2025-09-25 19:44:30 - rag_fii - INFO - [RAGAS] Avaliação concluída em 165.03s
+2025-10-02 23:21:51 - rag_fii - INFO - [FAISS] Iniciando processamento de PDFs: assets
+2025-10-02 23:21:51 - rag_fii - INFO - [FAISS] Encontrados 1 PDF(s):
+2025-10-02 23:21:51 - rag_fii - INFO - [FAISS]   1. RelatorioGerencial.pdf
+2025-10-02 23:21:54 - rag_fii - INFO - [FAISS] ✅ RelatorioGerencial.pdf - 17 páginas, 17 docs
+2025-10-02 23:21:54 - rag_fii - INFO - [FAISS] 1/1 PDFs processados
+2025-10-02 23:21:54 - rag_fii - INFO - [FAISS] 17 docs → 51 chunks (avg: 822 chars)
+2025-10-02 23:21:58 - rag_fii - INFO - [FAISS] Índice criado: 51 chunks em pdf_faiss_index
+2025-10-02 23:21:58 - rag_fii - INFO - [FAISS] ✅ Concluído em 7.13s
+2025-10-02 23:22:08 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-02 23:25:18 - rag_fii - ERROR - [ERROR] LLMQueryError: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+ | Context: Question: O XP Mall encerrou o mês de março de 2025 com um resultado acumulado nao distribuido de quanto por c...
+2025-10-02 23:27:24 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-02 23:27:36 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-02 23:27:37 - rag_fii - ERROR - [ERROR] LLMQueryError: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+ | Context: Question: O XP Mall encerrou o mês de março de 2025 com um resultado acumulado nao distribuido de quanto por c...
+2025-10-02 23:28:46 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-02 23:28:59 - rag_fii - INFO - [FAISS] Iniciando processamento de PDFs: assets
+2025-10-02 23:28:59 - rag_fii - INFO - [FAISS] Encontrados 1 PDF(s):
+2025-10-02 23:28:59 - rag_fii - INFO - [FAISS]   1. RelatorioGerencial.pdf
+2025-10-02 23:29:01 - rag_fii - INFO - [FAISS] ✅ RelatorioGerencial.pdf - 17 páginas, 17 docs
+2025-10-02 23:29:01 - rag_fii - INFO - [FAISS] 1/1 PDFs processados
+2025-10-02 23:29:01 - rag_fii - INFO - [FAISS] 17 docs → 51 chunks (avg: 822 chars)
+2025-10-02 23:30:20 - rag_fii - INFO - [FAISS] Iniciando processamento de PDFs: assets
+2025-10-02 23:30:20 - rag_fii - INFO - [FAISS] Encontrados 1 PDF(s):
+2025-10-02 23:30:20 - rag_fii - INFO - [FAISS]   1. RelatorioGerencial.pdf
+2025-10-02 23:30:23 - rag_fii - INFO - [FAISS] ✅ RelatorioGerencial.pdf - 17 páginas, 17 docs
+2025-10-02 23:30:23 - rag_fii - INFO - [FAISS] 1/1 PDFs processados
+2025-10-02 23:30:23 - rag_fii - INFO - [FAISS] 17 docs → 51 chunks (avg: 822 chars)
+2025-10-02 23:32:54 - rag_fii - INFO - [FAISS] Iniciando processamento de PDFs: assets
+2025-10-02 23:32:54 - rag_fii - INFO - [FAISS] Encontrados 1 PDF(s):
+2025-10-02 23:32:54 - rag_fii - INFO - [FAISS]   1. RelatorioGerencial.pdf
+2025-10-02 23:32:57 - rag_fii - INFO - [FAISS] ✅ RelatorioGerencial.pdf - 17 páginas, 17 docs
+2025-10-02 23:32:57 - rag_fii - INFO - [FAISS] 1/1 PDFs processados
+2025-10-02 23:32:57 - rag_fii - INFO - [FAISS] 17 docs → 51 chunks (avg: 822 chars)
+2025-10-02 23:34:51 - rag_fii - INFO - [FAISS] Iniciando processamento de PDFs: assets
+2025-10-02 23:34:51 - rag_fii - INFO - [FAISS] Encontrados 1 PDF(s):
+2025-10-02 23:34:51 - rag_fii - INFO - [FAISS]   1. RelatorioGerencial.pdf
+2025-10-02 23:34:54 - rag_fii - INFO - [FAISS] ✅ RelatorioGerencial.pdf - 17 páginas, 17 docs
+2025-10-02 23:34:54 - rag_fii - INFO - [FAISS] 1/1 PDFs processados
+2025-10-02 23:34:54 - rag_fii - INFO - [FAISS] 17 docs → 51 chunks (avg: 822 chars)
+2025-10-02 23:34:57 - rag_fii - INFO - [FAISS] Índice criado: 51 chunks em pdf_faiss_index
+2025-10-02 23:34:57 - rag_fii - INFO - [FAISS] ✅ Concluído em 6.12s
+2025-10-02 23:35:06 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-02 23:35:18 - rag_fii - INFO - [QUERY] llm_only: 104 chars → 388 chars (2.300s)
+2025-10-02 23:36:24 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-02 23:36:31 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-02 23:36:37 - rag_fii - ERROR - [ERROR] LLMQueryError: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+ | Context: Question: O XP Mall encerrou o mês de março de 2025 com um resultado acumulado nao distribuido de quanto por c...
+2025-10-02 23:40:39 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-02 23:43:07 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-02 23:45:45 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-02 23:45:52 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-02 23:46:07 - rag_fii - ERROR - [ERROR] LLMQueryError: Error code: 404 - {'error': {'message': 'This is a chat model and not supported in the v1/completions endpoint. Did you mean to use v1/chat/completions?', 'type': 'invalid_request_error', 'param': 'model', 'code': None}} | Context: Question: O XP Mall encerrou o mês de março de 2025 com um resultado acumulado nao distribuido de quanto por c...
+2025-10-02 23:50:17 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-02 23:50:22 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-02 23:50:39 - rag_fii - ERROR - [ERROR] LLMQueryError: object of type 'AIMessage' has no len() | Context: Question: O XP Mall encerrou o mês de março de 2025 com um resultado acumulado nao distribuido de quanto por c...
+2025-10-02 23:51:38 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-03 00:05:24 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-03 00:05:56 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-03 00:06:16 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-03 00:06:22 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-03 00:06:39 - rag_fii - INFO - [QUERY] llm_only: 104 chars → 422 chars (4.270s)
+2025-10-03 00:07:37 - rag_fii - INFO - [QUERY] rag_with_citations: 104 chars → 138 chars (2.354s)
+2025-10-03 00:07:37 - rag_fii - INFO - [CITATIONS] {'total_sources': 4, 'total_files': 1, 'files': ['RelatorioGerencial.pdf']}
+2025-10-03 00:07:55 - rag_fii - INFO - [QUERY] rag_simple: 104 chars → 122 chars (1.873s)
+2025-10-03 00:07:55 - rag_fii - INFO - [RAGAS] Avaliando pergunta com GPT-4o-mini: O XP Mall encerrou o mês de março de 2025 com um r...
+2025-10-03 00:07:59 - rag_fii - INFO - [QUERY] rag_simple: 104 chars → 122 chars (3.343s)
+2025-10-03 00:08:02 - rag_fii - INFO - [QUERY] llm_only: 104 chars → 394 chars (1.961s)
+2025-10-03 00:08:59 - rag_fii - INFO - [RAGAS] Avaliação concluída em 63.22s
+2025-10-03 00:22:37 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index

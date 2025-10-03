@@ -5,12 +5,17 @@ from domain.services.logging_service import RAGLogger
 from domain.services.citation_service import CitationService
 
 class RAGService:
+    """
+    NOTA: Esta classe já é compatível com ChatOpenAI
+    O RetrievalQA funciona tanto com OpenAI quanto ChatOpenAI
+    """
     def __init__(self, llm, retriever):
         self.llm = llm
         self.retriever = retriever
         self.logger = RAGLogger()
         self.citation_service = CitationService()
         
+        # RetrievalQA funciona com chat models automaticamente
         self.qa_chain = RetrievalQA.from_chain_type(
             llm=llm,
             retriever=retriever,
@@ -36,7 +41,8 @@ class RAGService:
             formatted_result["metadata"] = {
                 "total_sources": len(citations),
                 "files_used": list(set([c.filename for c in citations])),
-                "processing_time": round(processing_time, 3)
+                "processing_time": round(processing_time, 3),
+                "model": "gpt-4o-mini"  # Adicionar info do modelo usado
             }
             
             self._log_query_with_citations(question, formatted_result, citations, processing_time)
