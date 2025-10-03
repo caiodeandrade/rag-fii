@@ -27,6 +27,7 @@ def create_routes(rag_service, llm_service, evaluation_service):
                 "question": question,
                 "answer": answer,
                 "method": "LLM_only",
+                "model": "gpt-4o-mini",
                 "processing_time": round(processing_time, 3),
                 "warning": "Esta resposta pode conter alucinações - não baseada em documentos"
             })
@@ -51,6 +52,7 @@ def create_routes(rag_service, llm_service, evaluation_service):
             result = rag_service.answer_question(question)
             result["question"] = question
             result["method"] = "RAG_with_citations"
+            result["model"] = "gpt-4o-mini"
             
             return jsonify(result)
             
@@ -93,6 +95,7 @@ def create_routes(rag_service, llm_service, evaluation_service):
                 "question": question,
                 "rag_answer": rag_answer,
                 "method": "RAG_with_evaluation",
+                "model": "gpt-4o-mini",
                 "processing_time": round(processing_time, 3),
                 "ragas_evaluation": evaluation_result
             })
@@ -105,6 +108,7 @@ def create_routes(rag_service, llm_service, evaluation_service):
         """Status dos endpoints"""
         return jsonify({
             "status": "healthy",
+            "model": "gpt-4o-mini",
             "endpoints": {
                 "/llm": "LLM puro (pode alucinar)",
                 "/rag": "RAG com citações/tags",

@@ -138,3 +138,33 @@ A detailed migration guide is available here: https://github.com/openai/openai-p
 2025-10-03 00:08:02 - rag_fii - INFO - [QUERY] llm_only: 104 chars → 394 chars (1.961s)
 2025-10-03 00:08:59 - rag_fii - INFO - [RAGAS] Avaliação concluída em 63.22s
 2025-10-03 00:22:37 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-03 19:15:24 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-03 19:15:49 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-03 19:17:02 - rag_fii - INFO - [QUERY] llm_only: 104 chars → 422 chars (3.936s)
+2025-10-03 19:17:15 - rag_fii - INFO - [QUERY] rag_with_citations: 104 chars → 138 chars (4.037s)
+2025-10-03 19:17:15 - rag_fii - INFO - [CITATIONS] {'total_sources': 4, 'total_files': 1, 'files': ['RelatorioGerencial.pdf']}
+2025-10-03 19:17:22 - rag_fii - INFO - [QUERY] rag_simple: 104 chars → 122 chars (2.375s)
+2025-10-03 19:17:22 - rag_fii - INFO - [RAGAS] Avaliando pergunta com GPT-4o-mini: O XP Mall encerrou o mês de março de 2025 com um r...
+2025-10-03 19:17:25 - rag_fii - INFO - [QUERY] rag_simple: 104 chars → 122 chars (3.085s)
+2025-10-03 19:17:27 - rag_fii - INFO - [QUERY] llm_only: 104 chars → 422 chars (1.618s)
+2025-10-03 19:18:17 - rag_fii - INFO - [RAGAS] Avaliação concluída em 54.92s
+2025-10-03 19:32:45 - rag_fii - INFO - [FAISS] Iniciando processamento de PDFs: assets
+2025-10-03 19:32:45 - rag_fii - INFO - [FAISS] Encontrados 1 PDF(s):
+2025-10-03 19:32:45 - rag_fii - INFO - [FAISS]   1. RelatorioGerencial.pdf
+2025-10-03 19:32:47 - rag_fii - INFO - [FAISS] ✅ RelatorioGerencial.pdf - 17 páginas, 17 docs
+2025-10-03 19:32:47 - rag_fii - INFO - [FAISS] 1/1 PDFs processados
+2025-10-03 19:32:47 - rag_fii - INFO - [FAISS] 17 docs → 51 chunks (avg: 822 chars)
+2025-10-03 19:32:50 - rag_fii - INFO - [FAISS] Índice criado: 51 chunks em pdf_faiss_index
+2025-10-03 19:32:50 - rag_fii - INFO - [FAISS] ✅ Concluído em 5.08s
+2025-10-03 19:32:57 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-10-03 19:32:57 - rag_fii - INFO - [FAISS] 📊 Total de chunks no índice: 51
+2025-10-03 19:32:57 - rag_fii - INFO - [FAISS] Encontrados 1 PDF(s):
+2025-10-03 19:32:57 - rag_fii - INFO - [FAISS]   1. RelatorioGerencial.pdf
+2025-10-03 19:33:01 - rag_fii - INFO - [QUERY] llm_only: 104 chars → 422 chars (2.274s)
+2025-10-03 19:33:08 - rag_fii - INFO - [QUERY] rag_with_citations: 104 chars → 138 chars (1.966s)
+2025-10-03 19:33:08 - rag_fii - INFO - [CITATIONS] {'total_sources': 4, 'total_files': 1, 'files': ['RelatorioGerencial.pdf']}
+2025-10-03 19:33:14 - rag_fii - INFO - [QUERY] rag_simple: 104 chars → 122 chars (1.761s)
+2025-10-03 19:33:14 - rag_fii - INFO - [RAGAS] Avaliando pergunta com GPT-4o-mini: O XP Mall encerrou o mês de março de 2025 com um r...
+2025-10-03 19:33:19 - rag_fii - INFO - [QUERY] rag_simple: 104 chars → 122 chars (4.811s)
+2025-10-03 19:33:22 - rag_fii - INFO - [QUERY] llm_only: 104 chars → 422 chars (2.078s)
+2025-10-03 19:33:55 - rag_fii - INFO - [RAGAS] Avaliação concluída em 41.36s

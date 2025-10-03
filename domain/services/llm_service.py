@@ -2,10 +2,6 @@ import time
 from domain.services.logging_service import RAGLogger
 
 class LLMService:
-    """
-    NOTA: Esta classe já é compatível com ChatOpenAI
-    O método invoke() funciona tanto com OpenAI quanto ChatOpenAI
-    """
     def __init__(self, llm):
         self.llm = llm
         self.logger = RAGLogger()
@@ -14,11 +10,9 @@ class LLMService:
         start_time = time.time()
         
         try:
-            # invoke() funciona com chat models automaticamente
-            # ChatOpenAI converte strings em mensagens internamente
             response = self.llm.invoke(question)
             
-            # ChatOpenAI retorna um objeto AIMessage, extrair conteúdo
+            # ChatOpenAI retorna AIMessage
             if hasattr(response, 'content'):
                 answer = response.content
             else:

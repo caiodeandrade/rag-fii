@@ -19,11 +19,29 @@ class FaissRepository:
     def load_or_create_index(self):
         if os.path.exists(self.faiss_path):
             self.logger.log_faiss_loaded(self.faiss_path)
-            return FAISS.load_local(
+            
+            vectorstore = FAISS.load_local(
                 self.faiss_path,
                 self.embeddings,
                 allow_dangerous_deserialization=True
             )
+            
+            # Logs detalhados mesmo ao carregar índice existente
+            try:
+                total_chunks = vectorstore.index.ntotal
+                self.logger.logger.info(f"[FAISS] 📊 Total de chunks no índice: {total_chunks}")
+                
+                pdf_files = glob.glob(os.path.join(self.pdfs_dir, "*.pdf"))
+                if pdf_files:
+                    self.logger.log_pdf_discovery(pdf_files)
+                else:
+                    self.logger.logger.warning(f"[FAISS] ⚠️ Nenhum PDF encontrado em {self.pdfs_dir}")
+                
+            except Exception as e:
+                self.logger.logger.warning(f"[FAISS] Não foi possível obter estatísticas: {e}")
+            
+            return vectorstore
+        
         return self._create_new_index()
     
     def _create_new_index(self):
