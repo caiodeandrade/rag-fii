@@ -18,3 +18,29 @@
 2025-09-24 20:58:46 - rag_fii - INFO - [QUERY] rag_simple: 104 chars → 122 chars (2.708s)
 2025-09-24 20:58:48 - rag_fii - INFO - [QUERY] llm_only: 104 chars → 326 chars (1.189s)
 2025-09-24 20:59:34 - rag_fii - INFO - [RAGAS] Avaliação concluída em 50.58s
+2025-09-24 21:35:16 - rag_fii - INFO - [FAISS] Iniciando processamento de PDFs: assets
+2025-09-24 21:35:16 - rag_fii - INFO - [FAISS] Encontrados 1 PDF(s):
+2025-09-24 21:35:16 - rag_fii - INFO - [FAISS]   1. RelatorioGerencial.pdf
+2025-09-24 21:35:18 - rag_fii - INFO - [FAISS] ✅ RelatorioGerencial.pdf - 17 páginas, 17 docs
+2025-09-24 21:35:18 - rag_fii - INFO - [FAISS] 1/1 PDFs processados
+2025-09-24 21:35:18 - rag_fii - INFO - [FAISS] 17 docs → 51 chunks (avg: 822 chars)
+2025-09-24 21:35:20 - rag_fii - INFO - [FAISS] Índice criado: 51 chunks em pdf_faiss_index
+2025-09-24 21:35:20 - rag_fii - INFO - [FAISS] ✅ Concluído em 4.26s
+2025-09-24 21:35:26 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-09-25 19:38:55 - rag_fii - INFO - [FAISS] Iniciando processamento de PDFs: assets
+2025-09-25 19:38:55 - rag_fii - INFO - [FAISS] Encontrados 1 PDF(s):
+2025-09-25 19:38:55 - rag_fii - INFO - [FAISS]   1. RelatorioGerencial.pdf
+2025-09-25 19:39:01 - rag_fii - INFO - [FAISS] ✅ RelatorioGerencial.pdf - 17 páginas, 17 docs
+2025-09-25 19:39:01 - rag_fii - INFO - [FAISS] 1/1 PDFs processados
+2025-09-25 19:39:01 - rag_fii - INFO - [FAISS] 17 docs → 51 chunks (avg: 822 chars)
+2025-09-25 19:39:06 - rag_fii - INFO - [FAISS] Índice criado: 51 chunks em pdf_faiss_index
+2025-09-25 19:39:06 - rag_fii - INFO - [FAISS] ✅ Concluído em 10.71s
+2025-09-25 19:40:03 - rag_fii - INFO - [FAISS] Índice carregado: pdf_faiss_index
+2025-09-25 19:40:13 - rag_fii - INFO - [QUERY] llm_only: 104 chars → 133 chars (4.453s)
+2025-09-25 19:41:30 - rag_fii - INFO - [QUERY] rag_with_citations: 104 chars → 46 chars (3.774s)
+2025-09-25 19:41:30 - rag_fii - INFO - [CITATIONS] {'total_sources': 4, 'total_files': 1, 'files': ['RelatorioGerencial.pdf']}
+2025-09-25 19:41:45 - rag_fii - INFO - [QUERY] rag_simple: 104 chars → 34 chars (2.397s)
+2025-09-25 19:41:45 - rag_fii - INFO - [RAGAS] Avaliando pergunta: O XP Mall encerrou o mês de março de 2025 com um r...
+2025-09-25 19:41:47 - rag_fii - INFO - [QUERY] rag_simple: 104 chars → 30 chars (2.510s)
+2025-09-25 19:41:51 - rag_fii - INFO - [QUERY] llm_only: 104 chars → 151 chars (1.433s)
+2025-09-25 19:44:30 - rag_fii - INFO - [RAGAS] Avaliação concluída em 165.03s
